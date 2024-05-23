@@ -1,4 +1,3 @@
 git add .
-read -p 'commit message: ' commit
-git commit -m "$commit"
+git commit -m "advanced mysql"
 git push
