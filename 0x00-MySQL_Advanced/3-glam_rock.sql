@@ -1,6 +1,5 @@
---checks for the lifes[an of bands with a style named glam rock.
-SELECT band_name,
-    (IFNULL(split, '2020') - formed) as lifespan
+-- Lists all bands with Glam rock as their main style, ranked by their longevity.
+SELECT band_name, (IFNULL(split, '2020') - formed) AS lifespan
     FROM metal_bands
-    WHERE FIND_IN_SET('Glam rock', IFNULL(style, '')) > 0 
+    WHERE FIND_IN_SET('Glam rock', IFNULL(style, "")) > 0
     ORDER BY lifespan DESC;
