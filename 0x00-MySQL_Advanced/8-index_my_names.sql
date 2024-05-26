@@ -1,3 +1,2 @@
--- index on the first letter of name column
-DROP INDEX IF EXISTS idx_name_first ON names;
+-- Creates an index idx_name_first on the table names and the first letter of name.
 CREATE INDEX idx_name_first ON names(name(1));
