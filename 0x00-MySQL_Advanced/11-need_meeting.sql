@@ -1,3 +1,4 @@
+--create view to manage meetings
 DROP VIEW IF EXISTS need_mmeting;
 CREATE VIEW need_mmeting AS
 SELECT name 
