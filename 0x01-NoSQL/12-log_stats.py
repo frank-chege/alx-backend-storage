@@ -15,11 +15,11 @@ def main():
     '''show some nginx stats'''
     print(count_no({}), 'logs')
     print(f"Methods:\n\
-          \t method GET: {count_no({'method': 'GET'})}\n\
-          \t method POST: {count_no({'method': 'POST'})}\n\
-          \t method PUT: {count_no({'method': 'PUT'})}\n\
-          \t method PATCH: {count_no({'method': 'PATCH'})}\n\
-          \t method DELETE: {count_no({'method': 'DELETE'})}")
+    method GET: {count_no({'method': 'GET'})}\n\
+    method POST: {count_no({'method': 'POST'})}\n\
+    method PUT: {count_no({'method': 'PUT'})}\n\
+    method PATCH: {count_no({'method': 'PATCH'})}\n\
+    method DELETE: {count_no({'method': 'DELETE'})}")
     print(count_no({'path': '/status'}), 'status check')
 
 if __name__ == '__main__':
