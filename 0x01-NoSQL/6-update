@@ -1,6 +1,5 @@
 //add address to user
-db.school.update(
+db.school.updateMany(
     {name: 'Holberton school'},
-    {$set: {address: '972 Mission street'}},
-    {multi: true}
+    {$set: {address: '972 Mission street'}}
 )
