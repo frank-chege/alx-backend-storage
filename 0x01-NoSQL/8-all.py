@@ -11,4 +11,4 @@ def list_all(mongo_collection):
         return result
     else:
         for doc in result:
-            return result
+            yield doc
