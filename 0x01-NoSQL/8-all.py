@@ -7,3 +7,4 @@ def list_all(mongo_collection):
     client = MongoClient('localhost', 27017)
     db = client['my_db']
     result = db.mongo_collection.find()
+    return result
