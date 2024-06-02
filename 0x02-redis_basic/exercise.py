@@ -6,11 +6,24 @@ from typing import Any, Callable
 from functools import wraps
 
 def count_calls(method:Callable)->callable:
+    '''counts the no. of times a method is called'''
     @wraps(method)
     def wrapper(self, data):
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, data)
+    return wrapper
+
+def call_history(method:Callable)->Callable:
+    '''appends input and output of a method to lists'''
+    @wraps(method)
+    def wrapper(self, data):
+        inkey = method.__qualname__ + ':inputs'
+        outkey = method.__qualname__ + ':outputs'
+        self._redis.rpush(inkey, str(data))
+        output = method(self, data)
+        self._redis.rpush(outkey, output)
+        return output
     return wrapper
 
 class Cache:
@@ -19,6 +32,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data:Any)->Any:
         '''stores a value in a redis key'''
