@@ -3,6 +3,15 @@
 import redis
 import uuid
 from typing import Any, Callable
+from functools import wraps
+
+def count_calls(method:Callable)->callable:
+    @wraps(method)
+    def wrapper(self, data):
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, data)
+    return wrapper
 
 class Cache:
     def __init__(self) -> None:
@@ -10,6 +19,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data:Any)->Any:
         '''stores a value in a redis key'''
         key = str(uuid.uuid4())
