@@ -5,11 +5,15 @@ import uuid
 from typing import Any, Callable
 from functools import wraps
 
+key = ''
+inkey = ''
+outkey = ''
 def count_calls(method:Callable)->callable:
     '''counts the no. of times a method is called'''
     @wraps(method)
     def wrapper(self, data:Any)->Any:
         '''wrapper function'''
+        global key
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, data)
@@ -20,6 +24,8 @@ def call_history(method:Callable)->Callable:
     @wraps(method)
     def wrapper(self, data:Any)->Any:
         '''wrapper function'''
+        global inkey
+        global outkey
         inkey = method.__qualname__ + ':inputs'
         outkey = method.__qualname__ + ':outputs'
         self._redis.rpush(inkey, str(data))
@@ -27,6 +33,17 @@ def call_history(method:Callable)->Callable:
         self._redis.rpush(outkey, output)
         return output
     return wrapper
+
+def replay(method:Callable)->None:
+    '''display the history of calls'''
+    _redis = redis.Redis()
+    count = _redis.get(key).decode('UTF-8')
+    name = method.__qualname__
+    print(f'{name} was called {count} times:')
+    for x in range(_redis.llen(inkey)):
+        input = _redis.lindex(inkey, x).decode('UTF-8')
+        output = _redis.lindex(outkey, x).decode('UTF-8')
+        print(f'{name}(*({input},)) -> {output}')
 
 class Cache:
     def __init__(self) -> None:
@@ -70,3 +87,7 @@ TEST_CASES = {
 for value, fn in TEST_CASES.items():
     key = cache.store(value)
     assert cache.get(key, fn=fn) == value
+
+cache.store("foo")
+cache.store("bar")
+replay(cache.store)
