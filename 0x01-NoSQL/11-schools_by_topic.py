@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-'''find schools with a specific topic'''
+'''Task 11's module.
+'''
 
-from pymongo import MongoClient
 
 def schools_by_topic(mongo_collection, topic):
-    '''find schools with a specific topic'''
-    result = mongo_collection.find({'topics': topic})
-    return result
+    '''Returns the list of school having a specific topic.
+    '''
+    topic_filter = {
+        'topics': {
+            '$elemMatch': {
+                '$eq': topic,
+            },
+        },
+    }
+    return [doc for doc in mongo_collection.find(topic_filter)]

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-'''update schoool topics'''
-from pymongo import MongoClient
+'''Task 10's module.
+'''
+
 
 def update_topics(mongo_collection, name, topics):
-    '''update schoool topics'''
-    mongo_collection.update_one(
+    '''Changes all topics of a collection's document based on the name.
+    '''
+    mongo_collection.update_many(
         {'name': name},
         {'$set': {'topics': topics}}
     )
